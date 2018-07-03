@@ -73,62 +73,6 @@ setTimeout(loadSSIDs, 1000);
 </script>
 </body>
 )";
-const char ap_update_html[] PROGMEM = R"(<head>
-<title>OpenGarage</title>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-</head>
-<body>
-<div id='page_update'>
-<div><h3>OpenGarage AP-mode Firmware Update</h3></div>
-<div>
-<form method='POST' action='/update' id='fm' enctype='multipart/form-data'>
-<table cellspacing=4>
-<tr><td><input type='file' name='file' accept='.bin' id='file'></td></tr>
-<tr><td><b>Device key: </b><input type='password' name='dkey' size=16 maxlength=16 id='dkey'></td></tr>
-<tr><td><label id='msg'></label></td></tr>
-</table>
-<button id='btn_submit' style='height:48px;'>Submit</a>
-</form>
-</div>
-</div>
-<script>
-function id(s) {return document.getElementById(s);}
-function clear_msg() {id('msg').innerHTML='';}
-function show_msg(s,t,c) {
-id('msg').innerHTML=s.fontcolor(c);
-if(t>0) setTimeout(clear_msg, t);
-}
-id('btn_submit').addEventListener('click', function(e){
-e.preventDefault();
-var files= id('file').files;
-if(files.length==0) {show_msg('Please select a file.',2000,'red'); return;}
-if(id('dkey').value=='') {
-if(!confirm('You did not input a device key. Are you sure?')) return;
-}
-show_msg('Uploading. Please wait...',10000,'green');
-var fd = new FormData();
-var file = files[0];
-fd.append('file', file, file.name);
-fd.append('dkey', id('dkey').value);
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-if(xhr.readyState==4 && xhr.status==200) {
-var jd=JSON.parse(xhr.responseText);
-if(jd.result==1) {
-show_msg('Update is successful. Rebooting. Please wait...',0,'green');
-} else if (jd.result==2) {
-show_msg('Check device key and try again.', 10000, 'red');
-} else {
-show_msg('Update failed.',0,'red');
-}
-}
-};
-xhr.open('POST', 'update', true);
-xhr.send(fd);
-});
-</script>
-</body>
-)";
 const char sta_home_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css' type='text/css'><script src='http://code.jquery.com/jquery-1.9.1.min.js' type='text/javascript'></script><script src='http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js' type='text/javascript'></script></head>
 <body>
 <style> table, th, td {border: 0px solid black;padding: 6px; border-collapse: collapse; }</style>
@@ -141,7 +85,7 @@ const char sta_home_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta nam
 <tr><td><b>Distance:</b></td><td><label id='lbl_dist'>-</label></td><td></td></tr>
 <tr><td><b>Read&nbsp;Count:</b></td><td><label id='lbl_beat'>-</label></td><td></td></tr>
 <tr><td><b>WiFi&nbsp;Signal:</b></td><td colspan="2"><label id='lbl_rssi'>-</label></td></tr>
-<tr><td><b>Device&nbsp;Key:</b></td><td colspan="2" ><input type='password' size=20 maxlength=32 name='dkey' id='dkey'></td></tr>
+<tr><td><b>Device&nbsp;Key:</b></td><td colspan="2" ><input type='password' size=24 maxlength=32 name='dkey' id='dkey'></td></tr>
 <tr><td colspan=3><label id='msg'></label></td></tr>
 </table><br />
 <div data-role='controlgroup' data-type='horizontal'>
