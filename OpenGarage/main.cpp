@@ -345,7 +345,7 @@ void on_sta_change_controller() {
     if ((server->hasArg("close") && door_status) || (server->hasArg("open") && !door_status) || (server->hasArg("click"))) {
       DEBUG_PRINTLN(F("Valid command recieved based on door status"));
       
-      if(!og.options[OPTION_ALM].ival || (!door_status && !og.options[OPTION_ALMOPEN])) {
+      if(!og.options[OPTION_ALM].ival || (!door_status && !og.options[OPTION_ALMOPEN].ival)) {
         // if alarm is not enabled or door is closed and option to sound alarm when door opens is off, trigger relay right away
         og.click_relay();
       } else {
