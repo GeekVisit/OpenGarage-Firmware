@@ -42,6 +42,7 @@ OptionStruct OpenGarage::options[] = {
   {"vth", 150,       65535, ""},
   {"riv", 5,           300, ""},
   {"alm", OG_ALM_5,      2, ""},
+  {"alm-on-open", 1,     1, ""},
   {"htp", 80,        65535, ""},
   {"cdt", 1000,       5000, ""},
   {"mod", OG_MOD_AP,   255, ""},

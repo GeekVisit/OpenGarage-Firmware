@@ -28,7 +28,18 @@
 <option value=0>Disabled</option>
 <option value=1>5 seconds</option>                  
 <option value=2>10 seconds</option>      
-</select></td></tr>
+</select></td>
+<tr>
+<td>
+    <b>Alarm On Opening:</b></td><td>
+    <select name="alm-on-open" id="flip-open-alarm" data-role="slider">
+        <option value="0">Off</option>
+        <option value="1">On</option>
+    </select>
+</td>
+    </tr>
+    </td>
+</tr>
 </table>
 </div>
 <div id='div_cloud' style='display:none;'>
@@ -122,6 +133,7 @@ comm+='&dth='+$('#dth').val();
 comm+='&vth='+$('#vth').val();
 comm+='&riv='+$('#riv').val();
 comm+='&alm='+$('#alm').val();
+comm+='&alm-on-open='+$('#alm-on-open').val();
 comm+='&htp='+$('#htp').val();
 comm+='&cdt='+$('#cdt').val();
 comm+='&ati='+$('#ati').val();

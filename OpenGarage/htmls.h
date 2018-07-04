@@ -274,7 +274,18 @@ const char sta_options_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta 
 <option value=0>Disabled</option>
 <option value=1>5 seconds</option>                  
 <option value=2>10 seconds</option>      
-</select></td></tr>
+</select></td>
+<tr>
+<td>
+<b>Alarm On Opening:</b></td><td>
+<select name="alm-on-open" id="flip-open-alarm" data-role="slider">
+<option value="0">Off</option>
+<option value="1">On</option>
+</select>
+</td>
+</tr>
+</td>
+</tr>
 </table>
 </div>
 <div id='div_cloud' style='display:none;'>
@@ -364,6 +375,7 @@ comm+='&dth='+$('#dth').val();
 comm+='&vth='+$('#vth').val();
 comm+='&riv='+$('#riv').val();
 comm+='&alm='+$('#alm').val();
+comm+='&alm-on-open='+$('#alm-on-open').val();
 comm+='&htp='+$('#htp').val();
 comm+='&cdt='+$('#cdt').val();
 comm+='&ati='+$('#ati').val();
@@ -451,7 +463,7 @@ const char sta_update_html[] PROGMEM = R"(<head>
 <form method='POST' action='/update' id='fm' enctype='multipart/form-data'>
 <table cellspacing=4>
 <tr><td><input type='file' name='file' accept='.bin' id='file'></td></tr>
-<tr><td><b>Device key: </b><input type='password' name='dkey' size=16 maxlength=16 id='dkey'></td></tr>
+<tr><td><b>Device key: </b><input type='password' name='dkey' size=24 maxlength=32 id='dkey'></td></tr>
 <tr><td><label id='msg'></label></td></tr>
 </table>
 <a href='#' data-role='button' data-inline='true' data-theme='a' id='btn_back'>Back</a>

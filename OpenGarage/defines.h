@@ -99,6 +99,7 @@ typedef enum {
   OPTION_VTH,     // distance threshold vehicle detection
   OPTION_RIV,     // read interval
   OPTION_ALM,     // alarm mode
+  OPTION_ALMOPEN, // alarm on open
   OPTION_HTP,     // http port
   OPTION_CDT,     // click delay time
   OPTION_MOD,     // mode
