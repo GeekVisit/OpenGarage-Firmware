@@ -179,6 +179,7 @@ $(document).ready(function() {
 $.getJSON('jo', function(jd) {
 $('#fwv').text('v'+(jd.fwv/100>>0)+'.'+(jd.fwv/10%10>>0)+'.'+(jd.fwv%10>>0));
 $('#alm').val(jd.alm).selectmenu('refresh');
+$('#alm-on-open').val(jd.alm-on-open).slider('refresh');
 $('#mnt').val(jd.mnt).selectmenu('refresh');
 if(jd.mnt>1) $('#dth').textinput('disable'); 
 if(jd.mnt>0) $('#vth').textinput('disable'); 
