@@ -42,7 +42,7 @@ OptionStruct OpenGarage::options[] = {
   {"vth", 150,       65535, ""},
   {"riv", 5,           300, ""},
   {"alm", OG_ALM_5,      2, ""},
-  {"alm-on-open", 1,     1, ""},
+  {"alop", 1,            1, ""},
   {"htp", 80,        65535, ""},
   {"cdt", 1000,       5000, ""},
   {"mod", OG_MOD_AP,   255, ""},
@@ -236,13 +236,18 @@ void OpenGarage::options_save() {
   OptionStruct *o = options;
   for(byte i=0;i<NUM_OPTIONS;i++,o++) {
     file.print(o->name + ":");
-    if(o->max)
+    DEBUG_PRINT("|" + o->name + ":");
+  if(o->max) {
       file.println(o->ival);
-    else
+      DEBUG_PRINT(o->ival);
+  }  else {
       file.println(o->sval);
+      DEBUG_PRINT(o->sval);
+  } 
   }
   DEBUG_PRINTLN(F("ok"));  
   file.close();
+ 
 }
 
 uint OpenGarage::read_distance() {

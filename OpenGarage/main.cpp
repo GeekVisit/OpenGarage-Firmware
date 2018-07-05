@@ -616,7 +616,7 @@ void do_setup()
   og.begin();
   og.options_setup();
   if(og.get_mode() == OG_MOD_AP) og.play_startup_tune();
-  DEBUG_PRINT(F("Complile Info: "));
+  DEBUG_PRINT(F("Compile Info: "));
   DEBUG_PRINT(F(__DATE__));
   DEBUG_PRINT(F(" "));
   DEBUG_PRINTLN(F(__TIME__));
