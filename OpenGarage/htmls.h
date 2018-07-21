@@ -359,8 +359,12 @@ const char sta_options_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta 
 <tr><td colspan=4></td></tr><tr><td colspan=4></td></tr>
 <tr><td colspan=4>If open for longer than:</td></tr>
 <tr><td><input type='text' size=3 maxlength=3 id='ati' value=30 data-mini='true'></td><td>minutes:</td><td><input type='checkbox' id='ato0' data-mini='true'><label for='ato0'>Notify me</label></td><td><input type='checkbox' id='ato1' data-mini='true'><label for='ato1'>Auto-close</label></td></tr>
-<tr><td colspan=4>If open after time:<small> (Use UTC 24hr format)</small>:</td></tr>
-<tr><td><input type='text' size=3 maxlength=3 id='atib' value=3 data-mini='true'></td><td> UTC:</td><td><input type='checkbox' id='atob0' data-mini='true'><label for='atob0'>Notify me</label></td><td><input type='checkbox' id='atob1' data-mini='true'><label for='atob1'>Auto-close</label></td></tr>
+<tr>
+<!--  <td colspan=4>Current time is <label id='lbl_time'></label></td></tr> -->
+<tr>
+<td colspan=4>If open after time:<small> (Use Local Time 24hr format)</small>:</td></tr>
+
+<tr><td><input type='text' size=3 maxlength=3 id='atib' value=3 data-mini='true'></td><td> Local Time:</td><td><input type='checkbox' id='atob0' data-mini='true'><label for='atob0'>Notify me</label></td><td><input type='checkbox' id='atob1' data-mini='true'><label for='atob1'>Auto-close</label></td></tr>
 </table><table>
 </table>
 </div>
@@ -393,6 +397,11 @@ const char sta_options_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta 
 </div> 
 </div>
 <script>
+var curr_time = 0;
+var date = new Date();
+var timeLoaded = date.getTime();
+//var UTC_Hours = parseInt(date.getHours()) + date.getTimezoneOffset()/60;
+
 function clear_msg() {$('#msg').text('');}  
 function disable_dth() {
 if (parseInt($('#mnt option:selected').val()) >1){
@@ -424,9 +433,8 @@ if(eval_cb('#other')) $('#div_other').show();
 $('#btn_back').click(function(e){
 e.preventDefault(); goback();
 });
-/*Prepare and verify data for submission using API urls. 
-See API documentation for "Change Options" in docs).
-Url is /co + dkey + url encoded keys and values, see API guide
+/*Submit data = see API documentation for "Change Options" in docs).
+Url is /co + dkey + url encoded keys and values
 */
 $('#btn_submit').click(function(e){
 e.preventDefault();
@@ -441,7 +449,7 @@ comm+='&alop='+$('#alop').val();
 comm+='&htp='+$('#htp').val();
 comm+='&cdt='+$('#cdt').val();
 comm+='&ati='+$('#ati').val();
-comm+='&atib='+$('#atib').val();
+comm+='&atib='+ (parseInt($('#atib').val()) + parseInt((date.getTimezoneOffset()/60))).toString(); //Save time schedule as UTC
 var ato=0;
 for(var i=1;i>=0;i--) { ato=(ato<<1)+eval_cb('#ato'+i); }
 comm+='&ato='+ato;
@@ -480,7 +488,18 @@ setTimeout(goback, 4000);
 });
 }
 });
+function show_time() {
+
+// var UTC_offset = date.getTimezoneOffset()/60;
+
+curr_time ++;
+date.setTime(curr_time*1000 + timeLoaded);
+
+$('#lbl_time').text(date.toLocaleString());
+}
 $(document).ready(function() {
+
+setInterval(show_time, 1000);
 $.getJSON('jo', function(jd) {
 $('#fwv').text('v'+(jd.fwv/100>>0)+'.'+(jd.fwv/10%10>>0)+'.'+(jd.fwv%10>>0));
 $('#alm').val(jd.alm).selectmenu('refresh');
@@ -494,7 +513,7 @@ $('#riv').val(jd.riv);
 $('#htp').val(jd.htp);
 $('#cdt').val(jd.cdt);
 $('#ati').val(jd.ati);
-$('#atib').val(jd.atib);
+$('#atib').val(jd.atib  + date.getTimezoneOffset()/60);
 for(var i=0;i<=1;i++) {if(jd.ato&(1<<i)) $('#ato'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.atob&(1<<i)) $('#atob'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.noto&(1<<i)) $('#noto'+i).attr('checked',true).checkboxradio('refresh');}
