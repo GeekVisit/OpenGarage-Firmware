@@ -181,7 +181,7 @@ comm+='&usi=1&dvip='+($('#dvip').val())+'&gwip='+($('#gwip').val());
 comm+='&usi=0';
 comm+='&usi=0';
 }
- alert("Here is the url " + comm );
+ //alert("URL is " + comm );
 // comm is url; submit change options to change options api /co 
 $.getJSON(comm, function(jd) {
 if(jd.result!=1) {
@@ -229,8 +229,8 @@ $('#htp').val(jd.htp);
 $('#cdt').val(jd.cdt);
 $('#ati').val(jd.ati);
 $('#atib').val(jd.atib  - date.getTimezoneOffset()/60);
-//alert ("Hi");
-alert ("ATIB is " + jd.atib);
+
+//alert ("ATIB is " + jd.atib);
 for(var i=0;i<=1;i++) {if(jd.ato&(1<<i)) $('#ato'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.atob&(1<<i)) $('#atob'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.noto&(1<<i)) $('#noto'+i).attr('checked',true).checkboxradio('refresh');}
