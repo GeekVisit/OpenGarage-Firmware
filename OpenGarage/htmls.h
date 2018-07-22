@@ -84,7 +84,7 @@ const char ap_update_html[] PROGMEM = R"(<head>
 <form method='POST' action='/update' id='fm' enctype='multipart/form-data'>
 <table cellspacing=4>
 <tr><td><input type='file' name='file' accept='.bin' id='file'></td></tr>
-<tr><td><b>Device key: </b><input type='password' name='dkey' size=16 maxlength=16 id='dkey'></td></tr>
+<tr><td><b>Device key: </b><input type='password' name='dkey' size=24 maxlength=32 id='dkey'></td></tr>
 <tr><td><label id='msg'></label></td></tr>
 </table>
 <button id='btn_submit' style='height:48px;'>Submit</a>
@@ -141,7 +141,7 @@ const char sta_home_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta nam
 <tr><td><b>Distance:</b></td><td><label id='lbl_dist'>-</label></td><td></td></tr>
 <tr><td><b>Read&nbsp;Count:</b></td><td><label id='lbl_beat'>-</label></td><td></td></tr>
 <tr><td><b>WiFi&nbsp;Signal:</b></td><td colspan="2"><label id='lbl_rssi'>-</label></td></tr>
-<tr><td><b>Device&nbsp;Key:</b></td><td colspan="2" ><input type='password' size=20 maxlength=32 name='dkey' id='dkey'></td></tr>
+<tr><td><b>Device&nbsp;Key:</b></td><td colspan="2" ><input type='password' size=24 maxlength=32 name='dkey' id='dkey'></td></tr>
 <tr><td colspan=3><label id='msg'></label></td></tr>
 </table><br />
 <div data-role='controlgroup' data-type='horizontal'>
@@ -330,7 +330,19 @@ const char sta_options_html[] PROGMEM = R"(<head><title>OpenGarage</title><meta 
 <option value=0>Disabled</option>
 <option value=1>5 seconds</option>                  
 <option value=2>10 seconds</option>      
-</select></td></tr>
+</select></td>
+</tr>
+<tr>
+<td>
+<b>Alarm On Opening:</b>
+</td>
+<td>
+<select name='alop' id='alop' data-role='slider'>
+<option value=0>Off</option>
+<option value=1>On</option>
+</select>
+</td>
+</tr>
 </table>
 </div>
 <div id='div_cloud' style='display:none;'>
@@ -400,6 +412,7 @@ $('#dvip').textinput($(this).is(':checked')?'enable':'disable');
 $('#gwip').textinput($(this).is(':checked')?'enable':'disable');
 $('#subn').textinput($(this).is(':checked')?'enable':'disable');      
 });
+//toggle display of options which rely on others
 function toggle_opt() {
 $('#div_basic').hide();
 $('#div_cloud').hide();
@@ -411,6 +424,10 @@ if(eval_cb('#other')) $('#div_other').show();
 $('#btn_back').click(function(e){
 e.preventDefault(); goback();
 });
+/*Prepare and verify data for submission using API urls. 
+See API documentation for "Change Options" in docs).
+Url is /co + dkey + url encoded keys and values, see API guide
+*/
 $('#btn_submit').click(function(e){
 e.preventDefault();
 if(confirm('Submit changes?')) {
@@ -420,6 +437,7 @@ comm+='&dth='+$('#dth').val();
 comm+='&vth='+$('#vth').val();
 comm+='&riv='+$('#riv').val();
 comm+='&alm='+$('#alm').val();
+comm+='&alop='+$('#alop').val();
 comm+='&htp='+$('#htp').val();
 comm+='&cdt='+$('#cdt').val();
 comm+='&ati='+$('#ati').val();
@@ -449,6 +467,8 @@ comm+='&usi=1&dvip='+($('#dvip').val())+'&gwip='+($('#gwip').val());
 } else {
 comm+='&usi=0';
 }
+// alert("Here is the url " + comm );
+// comm is url; submit change options to change options api /co 
 $.getJSON(comm, function(jd) {
 if(jd.result!=1) {
 if(jd.result==2) show_msg('Check device key and try again.');
@@ -464,6 +484,7 @@ $(document).ready(function() {
 $.getJSON('jo', function(jd) {
 $('#fwv').text('v'+(jd.fwv/100>>0)+'.'+(jd.fwv/10%10>>0)+'.'+(jd.fwv%10>>0));
 $('#alm').val(jd.alm).selectmenu('refresh');
+$('#alop').val(jd.alop).slider('refresh');
 $('#mnt').val(jd.mnt).selectmenu('refresh');
 if(jd.mnt>1) $('#dth').textinput('disable'); 
 if(jd.mnt>0) $('#vth').textinput('disable'); 
@@ -507,7 +528,7 @@ const char sta_update_html[] PROGMEM = R"(<head>
 <form method='POST' action='/update' id='fm' enctype='multipart/form-data'>
 <table cellspacing=4>
 <tr><td><input type='file' name='file' accept='.bin' id='file'></td></tr>
-<tr><td><b>Device key: </b><input type='password' name='dkey' size=16 maxlength=16 id='dkey'></td></tr>
+<tr><td><b>Device key: </b><input type='password' name='dkey' size=24 maxlength=32 id='dkey'></td></tr>
 <tr><td><label id='msg'></label></td></tr>
 </table>
 <a href='#' data-role='button' data-inline='true' data-theme='a' id='btn_back'>Back</a>
