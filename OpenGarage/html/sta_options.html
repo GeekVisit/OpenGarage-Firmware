@@ -63,8 +63,7 @@
 <!--  <td colspan=4>Current time is <label id='lbl_time'></label></td></tr> -->
   <tr>
       <td colspan=4>If open after time:<small> (Use Local Time 24hr format)</small>:</td></tr>
-  
-  <tr><td><input type='text' size=3 maxlength=3 id='atib' value=3 data-mini='true'></td><td> Local Time:</td><td><input type='checkbox' id='atob0' data-mini='true'><label for='atob0'>Notify me</label></td><td><input type='checkbox' id='atob1' data-mini='true'><label for='atob1'>Auto-close</label></td></tr>
+    <tr><td><input type='text' size=3 maxlength=3 id='atib' value=18 data-mini='true'></td><td> Local Time:</td><td><input type='checkbox' id='atob0' data-mini='true'><label for='atob0'>Notify me</label></td><td><input type='checkbox' id='atob1' data-mini='true'><label for='atob1'>Auto-close</label></td></tr>
 </table><table>
   </table>
 </div>
@@ -180,8 +179,9 @@ if($('#usi').is(':checked')) {
 comm+='&usi=1&dvip='+($('#dvip').val())+'&gwip='+($('#gwip').val());
 } else {
 comm+='&usi=0';
+comm+='&usi=0';
 }
-// alert("Here is the url " + comm );
+ alert("Here is the url " + comm );
 // comm is url; submit change options to change options api /co 
 $.getJSON(comm, function(jd) {
 if(jd.result!=1) {
@@ -228,7 +228,9 @@ $('#riv').val(jd.riv);
 $('#htp').val(jd.htp);
 $('#cdt').val(jd.cdt);
 $('#ati').val(jd.ati);
-$('#atib').val(jd.atib  + date.getTimezoneOffset()/60);
+$('#atib').val(jd.atib  - date.getTimezoneOffset()/60);
+//alert ("Hi");
+alert ("ATIB is " + jd.atib);
 for(var i=0;i<=1;i++) {if(jd.ato&(1<<i)) $('#ato'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.atob&(1<<i)) $('#atob'+i).attr('checked',true).checkboxradio('refresh');}
 for(var i=0;i<=1;i++) {if(jd.noto&(1<<i)) $('#noto'+i).attr('checked',true).checkboxradio('refresh');}
