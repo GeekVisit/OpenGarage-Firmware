@@ -134,7 +134,7 @@ typedef enum {
 #define TIME_SYNC_TIMEOUT  1800 //Issues connecting to MQTT can throw off the time function, sync more often
 
 /** Serial debug functions */
-//#define SERIAL_DEBUG
+//#define SERIAL_DEBUG  /*Uncomment to debug*/
 #if defined(SERIAL_DEBUG)
 
   #define DEBUG_BEGIN(x)   { Serial.begin(x); }
